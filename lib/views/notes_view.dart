@@ -1,7 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:notesapp/constants/routes.dart';
 import 'package:notesapp/enums/menu_actions.dart';
+import 'package:notesapp/services/auth/auth_services.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
@@ -16,7 +16,7 @@ class _NotesViewState extends State<NotesView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Notes'),
-        backgroundColor: const Color.fromARGB(255, 211, 55, 55),
+        backgroundColor: const Color.fromARGB(255, 210, 41, 41),
         elevation: 0,
         actions: [
           PopupMenuButton<MenuAction>(
@@ -25,7 +25,7 @@ class _NotesViewState extends State<NotesView> {
                 case MenuAction.logout:
                   final shouldlogout = await showLogOutDialog(context);
                   if (shouldlogout) {
-                    await FirebaseAuth.instance.signOut();
+                    await AuthService.firebase().logOut();
                     // ignore: use_build_context_synchronously
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       loginRoute,

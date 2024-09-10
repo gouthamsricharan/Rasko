@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:notesapp/constants/routes.dart';
+import 'package:notesapp/services/auth/auth_services.dart';
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({super.key});
@@ -9,45 +9,13 @@ class VerifyEmailView extends StatefulWidget {
   State<VerifyEmailView> createState() => _VerifyEmailViewState();
 }
 
-// class _VerifyEmailViewState extends State<VerifyEmailView> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('register Email'),
-//       ),
-//       body: Column(
-//         children: [
-//           const Text(
-//               'we have sent you an email veification link, please open mail and verify it'),
-//           const Text('                     .                       '),
-//           const Text('If you have not received the mail , press here '),
-//           TextButton(
-//             onPressed: () async {
-//               final user = FirebaseAuth.instance.currentUser;
-//               await user?.sendEmailVerification();
-//             },
-//             child: const Text('Send Email Verification'),
-//           ),
-//           TextButton(
-//             onPressed: () {
-//               FirebaseAuth.instance.signOut();
-//             },
-//             child: const Text('Restart'),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 class _VerifyEmailViewState extends State<VerifyEmailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Verify Email'),
-        backgroundColor: const Color.fromARGB(255, 211, 55, 55),
+        backgroundColor: const Color.fromARGB(255, 210, 41, 41),
         elevation: 0,
       ),
       body: Padding(
@@ -81,8 +49,8 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () async {
-                  final user = FirebaseAuth.instance.currentUser;
-                  await user?.sendEmailVerification();
+                  // ignore: await_only_futures
+                  await AuthService.firebase().sendEmailVerification;
                   // ignore: use_build_context_synchronously
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Verification email sent')),
@@ -96,8 +64,9 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
             ),
             const SizedBox(height: 16),
             TextButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
+              onPressed: () async {
+                await AuthService.firebase().logOut();
+                // ignore: use_build_context_synchronously
                 Navigator.of(context)
                     .pushNamedAndRemoveUntil(registerRoute, (route) => false);
               },
@@ -109,3 +78,36 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
     );
   }
 }
+
+
+// class _VerifyEmailViewState extends State<VerifyEmailView> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('register Email'),
+//       ),
+//       body: Column(
+//         children: [
+//           const Text(
+//               'we have sent you an email veification link, please open mail and verify it'),
+//           const Text('                     .                       '),
+//           const Text('If you have not received the mail , press here '),
+//           TextButton(
+//             onPressed: () async {
+//               final user = FirebaseAuth.instance.currentUser;
+//               await user?.sendEmailVerification();
+//             },
+//             child: const Text('Send Email Verification'),
+//           ),
+//           TextButton(
+//             onPressed: () {
+//               FirebaseAuth.instance.signOut();
+//             },
+//             child: const Text('Restart'),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
