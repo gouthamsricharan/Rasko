@@ -5,7 +5,6 @@ import 'package:notesapp/constants/routes.dart';
 import 'package:notesapp/enums/menu_actions.dart';
 import 'package:notesapp/services/auth/auth_services.dart';
 import 'package:notesapp/services/crud/notes_service.dart';
-import 'package:notesapp/views/notes/new_note_view.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
@@ -80,6 +79,7 @@ class _NotesViewState extends State<NotesView> {
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
+                    case ConnectionState.active:
                       return const Text('waiting for all notes');
                     default:
                       return const CircularProgressIndicator();
