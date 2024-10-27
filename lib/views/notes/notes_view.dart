@@ -10,7 +10,8 @@ class NotesView extends StatefulWidget {
   const NotesView({super.key});
 
   @override
-  State<NotesView> createState() => _NotesViewState();
+  // ignore: library_private_types_in_public_api
+  _NotesViewState createState() => _NotesViewState();
 }
 
 class _NotesViewState extends State<NotesView> {
@@ -20,35 +21,27 @@ class _NotesViewState extends State<NotesView> {
   @override
   void initState() {
     _notesService = NotesService();
-    _notesService.open();
     super.initState();
   }
-
-  // @override
-  // void dispose() {
-  //   _notesService.close();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Notes'),
-        backgroundColor: const Color.fromARGB(255, 210, 41, 41),
-        elevation: 0,
+        title: const Text('Your Notes'),
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed(newNoteRoute);
-              },
-              icon: const Icon(Icons.add)),
+            onPressed: () {
+              Navigator.of(context).pushNamed(newNoteRoute);
+            },
+            icon: const Icon(Icons.add),
+          ),
           PopupMenuButton<MenuAction>(
             onSelected: (value) async {
               switch (value) {
                 case MenuAction.logout:
-                  final shouldlogout = await showLogOutDialog(context);
-                  if (shouldlogout) {
+                  final shouldLogout = await showLogOutDialog(context);
+                  if (shouldLogout) {
                     await AuthService.firebase().logOut();
                     // ignore: use_build_context_synchronously
                     Navigator.of(context).pushNamedAndRemoveUntil(
@@ -62,8 +55,8 @@ class _NotesViewState extends State<NotesView> {
               return const [
                 PopupMenuItem<MenuAction>(
                   value: MenuAction.logout,
-                  child: Text('log out'),
-                )
+                  child: Text('Log out'),
+                ),
               ];
             },
           )

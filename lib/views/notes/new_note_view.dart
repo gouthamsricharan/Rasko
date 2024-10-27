@@ -6,7 +6,8 @@ class NewNoteView extends StatefulWidget {
   const NewNoteView({super.key});
 
   @override
-  State<NewNoteView> createState() => _NewNoteViewState();
+  // ignore: library_private_types_in_public_api
+  _NewNoteViewState createState() => _NewNoteViewState();
 }
 
 class _NewNoteViewState extends State<NewNoteView> {
@@ -33,7 +34,7 @@ class _NewNoteViewState extends State<NewNoteView> {
     );
   }
 
-  void _setUpTextControllerListener() {
+  void _setupTextControllerListener() {
     _textController.removeListener(_textControllerListener);
     _textController.addListener(_textControllerListener);
   }
@@ -49,14 +50,14 @@ class _NewNoteViewState extends State<NewNoteView> {
     return await _notesService.createNote(owner: owner);
   }
 
-  void _deleteNoteIfTextisEmpty() {
+  void _deleteNoteIfTextIsEmpty() {
     final note = _note;
     if (_textController.text.isEmpty && note != null) {
       _notesService.deleteNote(id: note.id);
     }
   }
 
-  void _saveNoteIfTextIsNotEmpty() async {
+  void _saveNoteIfTextNotEmpty() async {
     final note = _note;
     final text = _textController.text;
     if (note != null && text.isNotEmpty) {
@@ -69,8 +70,8 @@ class _NewNoteViewState extends State<NewNoteView> {
 
   @override
   void dispose() {
-    _deleteNoteIfTextisEmpty();
-    _saveNoteIfTextIsNotEmpty();
+    _deleteNoteIfTextIsEmpty();
+    _saveNoteIfTextNotEmpty();
     _textController.dispose();
     super.dispose();
   }
@@ -87,13 +88,13 @@ class _NewNoteViewState extends State<NewNoteView> {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
               _note = snapshot.data as DatabaseNote;
-              _setUpTextControllerListener();
+              _setupTextControllerListener();
               return TextField(
                 controller: _textController,
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
                 decoration: const InputDecoration(
-                  hintText: 'Start typing your notes',
+                  hintText: 'Start typing your note...',
                 ),
               );
             default:

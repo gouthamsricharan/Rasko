@@ -13,8 +13,10 @@ class FirebaseAuthProvider implements AuthProvider {
     required String password,
   }) async {
     try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
       final user = currentUser;
       if (user != null) {
         return user;
@@ -98,6 +100,5 @@ class FirebaseAuthProvider implements AuthProvider {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
- 
   }
 }

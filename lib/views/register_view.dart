@@ -1,8 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-// import 'dart:developer' as devtools show log;
-
 import 'package:notesapp/constants/routes.dart';
 import 'package:notesapp/services/auth/auth_exceptions.dart';
 import 'package:notesapp/services/auth/auth_services.dart';
@@ -12,7 +10,8 @@ class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
   @override
-  State<RegisterView> createState() => _RegisterViewState();
+  // ignore: library_private_types_in_public_api
+  _RegisterViewState createState() => _RegisterViewState();
 }
 
 class _RegisterViewState extends State<RegisterView> {
@@ -37,14 +36,7 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Register',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: const Color.fromARGB(255, 210, 41, 41),
-        elevation: 0,
+        title: const Text('Register'),
       ),
       body: Column(
         children: [
@@ -53,8 +45,9 @@ class _RegisterViewState extends State<RegisterView> {
             enableSuggestions: false,
             autocorrect: false,
             keyboardType: TextInputType.emailAddress,
-            decoration:
-                const InputDecoration(hintText: 'please enter your Email here'),
+            decoration: const InputDecoration(
+              hintText: 'Enter your email here',
+            ),
           ),
           TextField(
             controller: _password,
@@ -62,7 +55,8 @@ class _RegisterViewState extends State<RegisterView> {
             enableSuggestions: false,
             autocorrect: false,
             decoration: const InputDecoration(
-                hintText: 'please enter your Password here'),
+              hintText: 'Enter your password here',
+            ),
           ),
           TextButton(
             onPressed: () async {
@@ -76,30 +70,38 @@ class _RegisterViewState extends State<RegisterView> {
                 AuthService.firebase().sendEmailVerification();
                 Navigator.of(context).pushNamed(verifyemailRoute);
               } on WeakPasswordAuthException {
-                showErrorDialog(
+                await showErrorDialog(
                   context,
-                  'weak password',
+                  'Weak password',
                 );
               } on EmailAlreadyInUseAuthException {
-                showErrorDialog(
+                await showErrorDialog(
                   context,
-                  'email already in use',
+                  'Email is already in use',
                 );
               } on InvalidEmailAuthException {
-                showErrorDialog(context, 'invalid email');
+                await showErrorDialog(
+                  context,
+                  'This is an invalid email address',
+                );
               } on GenericAuthException {
-                showErrorDialog(context, 'Failed to register');
+                await showErrorDialog(
+                  context,
+                  'Failed to register',
+                );
               }
             },
             child: const Text('Register'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil(loginRoute, (route) => false);
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                loginRoute,
+                (route) => false,
+              );
             },
-            child: const Text('wanna login?'),
-          ),
+            child: const Text('Already registered? Login here!'),
+          )
         ],
       ),
     );

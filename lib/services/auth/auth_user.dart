@@ -14,6 +14,4 @@ class AuthUser {
         email: user.email,
         isEmailVerified: user.emailVerified,
       );
-      
-
 }
