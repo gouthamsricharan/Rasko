@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:notesapp/constants/routes.dart';
-import 'package:notesapp/services/auth/auth_services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notesapp/services/auth/bloc/auth_bloc.dart';
+import 'package:notesapp/services/auth/bloc/auth_event.dart';
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({super.key});
@@ -48,9 +49,10 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () async {
-                  // ignore: await_only_futures
-                  await AuthService.firebase().sendEmailVerification;
+                onPressed: () {
+                  context
+                      .read<AuthBloc>()
+                      .add(const AuthEventSendEmailVerification());
                   // ignore: use_build_context_synchronously
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Verification email sent')),
@@ -64,11 +66,10 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
             ),
             const SizedBox(height: 16),
             TextButton(
-              onPressed: () async {
-                await AuthService.firebase().logOut();
-                // ignore: use_build_context_synchronously
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil(registerRoute, (route) => false);
+              onPressed: ()  {
+               context
+                      .read<AuthBloc>()
+                      .add(const AuthEventLogOut());
               },
               child: const Text('Back to Register'),
             ),
