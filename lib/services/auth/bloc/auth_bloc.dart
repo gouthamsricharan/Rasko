@@ -4,7 +4,9 @@ import 'package:notesapp/services/auth/bloc/auth_event.dart';
 import 'package:notesapp/services/auth/bloc/auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc(AuthProvider provider) : super(const AuthStateUnInitialized()) {
+  AuthBloc(AuthProvider provider)
+      : super(const AuthStateUnInitialized(isLoading: true)) {
+    //send email verification
     on<AuthEventSendEmailVerification>((event, emit) async {
       await provider.sendEmailVerification();
       emit(state);
@@ -16,11 +18,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         provider.createUser(email: email, password: password);
         await provider.sendEmailVerification();
         emit(
-          const AuthStateNeedsVerificaton(),
+          const AuthStateNeedsVerificaton(isLoading: false),
         );
       } on Exception catch (e) {
         emit(
-          AuthStateRegistering(e),
+          AuthStateRegistering(exception: e, isLoading: false),
         );
       }
     });
@@ -33,14 +35,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(const AuthStateLoggedOut(
             exception: null,
             isLoading: false,
+            loadingText: 'Please Wait while i log you in',
           ));
         } else if (!user.isEmailVerified) {
           emit(
-            const AuthStateNeedsVerificaton(),
+            const AuthStateNeedsVerificaton(isLoading: false),
           );
         } else {
           emit(
-            AuthStateLoggedIn(user),
+            AuthStateLoggedIn(user: user, isLoading: false),
           );
         }
       },
