@@ -15,9 +15,15 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Verify Email'),
-        backgroundColor: const Color.fromARGB(255, 210, 41, 41),
+        title: const Text(
+          'Verify',
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+            fontSize: 28,
+          ),
+        ),
         elevation: 0,
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -26,26 +32,32 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
           children: [
             const Icon(
               Icons.mark_email_unread,
-              size: 70,
-              color: Color.fromARGB(255, 211, 55, 55),
+              size: 90,
+              color: Color(0xFF424242),
             ),
             const SizedBox(height: 24),
             const Text(
               'Check Your Email',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
             ),
             const SizedBox(height: 16),
             const Text(
-              'We\'ve sent you an email verification link. Please check your inbox and verify your email address.',
+              'Please check your inbox, verify your email, and return to log in with your credentials',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+              ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
             const Text(
               'Didn\'t receive the email?',
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -60,18 +72,46 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 12),
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
-                child: const Text('Resend Verification Email'),
+                child: const Text(
+                  'Resend Verification Email',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: 16),
-            TextButton(
-              onPressed: ()  {
-               context
-                      .read<AuthBloc>()
-                      .add(const AuthEventLogOut());
-              },
-              child: const Text('Back to Register'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Unfortunately landed here?',
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    context.read<AuthBloc>().add(const AuthEventLogOut());
+                  },
+                  child: const Text(
+                    'Back to Login',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
