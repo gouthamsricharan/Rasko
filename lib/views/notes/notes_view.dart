@@ -11,6 +11,7 @@ import 'package:notesapp/services/cloud/cloud_note.dart';
 import 'package:notesapp/services/cloud/firebase_cloud_storage.dart';
 import 'package:notesapp/utilities/dialogs/logout_dialog.dart';
 import 'package:notesapp/views/notes/notes_list_view.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
@@ -34,7 +35,14 @@ class _NotesViewState extends State<NotesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your Notes'),
+        title: Text(
+          ' Rasuko',
+          style: GoogleFonts.montserratAlternates(
+            fontSize: 26,
+            fontWeight: FontWeight.w800,
+            fontStyle: FontStyle.italic,
+          ),
+        ),
         actions: [
           IconButton(
             onPressed: () {

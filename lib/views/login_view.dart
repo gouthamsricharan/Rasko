@@ -90,6 +90,7 @@ class _LoginViewState extends State<LoginView> {
                 autocorrect: false,
                 autofocus: true,
                 keyboardType: TextInputType.emailAddress,
+                
                 decoration: InputDecoration(
                   hintText: 'Enter your email here...',
                   labelText: 'Email',
