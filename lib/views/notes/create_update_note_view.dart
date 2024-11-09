@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:notesapp/services/auth/auth_services.dart';
 import 'package:notesapp/utilities/dialogs/cannot_share_empty_note_dialog.dart';
-// import 'package:notesapp/services/crud/notes_service.dart';
 import 'package:notesapp/utilities/generics/get_arguments.dart';
 import 'package:notesapp/services/cloud/cloud_note.dart';
-// import 'package:notesapp/services/cloud/cloud_storage_exceptions.dart';
 import 'package:notesapp/services/cloud/firebase_cloud_storage.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CreateUpdateNoteView extends StatefulWidget {
   const CreateUpdateNoteView({super.key});
@@ -20,6 +19,8 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   CloudNote? _note;
   late final FirebaseCloudStorage _notesService;
   late final TextEditingController _textController;
+  // ignore: unused_field
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -30,9 +31,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
 
   void _textControllerListener() async {
     final note = _note;
-    if (note == null) {
-      return;
-    }
+    if (note == null) return;
     final text = _textController.text;
     await _notesService.updateNote(documentId: note.documentId, text: text);
   }
@@ -42,7 +41,6 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     _textController.addListener(_textControllerListener);
   }
 
-  //create or get existing note
   Future<CloudNote> createOrGetExistingNote(BuildContext context) async {
     final widgetNote = context.getArgument<CloudNote>();
     if (widgetNote != null) {
@@ -51,12 +49,11 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
       return widgetNote;
     }
     final existingNote = _note;
-    if (existingNote != null) {
-      return existingNote;
-    }
+    if (existingNote != null) return existingNote;
+
     final currentUser = AuthService.firebase().currentUser!;
-    final userId = currentUser.id;
-    final newNote = await _notesService.createNewNote(ownerUserId: userId);
+    final newNote =
+        await _notesService.createNewNote(ownerUserId: currentUser.id);
     _note = newNote;
     return newNote;
   }
@@ -72,7 +69,9 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     final note = _note;
     final text = _textController.text;
     if (note != null && text.isNotEmpty) {
+      setState(() => _isLoading = true);
       await _notesService.updateNote(documentId: note.documentId, text: text);
+      setState(() => _isLoading = false);
     }
   }
 
@@ -88,38 +87,57 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New Note'),
+        elevation: 0,
+        title: const Text(
+          'New Note',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
         actions: [
           IconButton(
             onPressed: () async {
               final text = _textController.text;
               if (_note == null || text.isEmpty) {
-                await showCannotSharEmptyDialog(context);
+                await showCannotShareEmptyDialog(context);
               } else {
                 Share.share(text);
               }
             },
-            icon: const Icon(Icons.share),
+            icon: const Icon(Icons.share_rounded),
           ),
         ],
       ),
       body: FutureBuilder(
         future: createOrGetExistingNote(context),
         builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              _setupTextControllerListener();
-              return TextField(
+          if (snapshot.connectionState == ConnectionState.done) {
+            _setupTextControllerListener();
+            return Container(
+              padding: const EdgeInsets.all(16),
+              child: TextField(
                 controller: _textController,
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
-                decoration: const InputDecoration(
-                  hintText: 'Start typing your note...',
+                style: GoogleFonts.roboto(
+                  fontSize: 16,
+                  height: 1.5,
                 ),
-              );
-            default:
-              return const CircularProgressIndicator();
+                decoration: InputDecoration(
+                  hintText: 'Start typing your note...',
+                  hintStyle: GoogleFonts.roboto(
+                    color: Colors.grey,
+                  ),
+                  border: InputBorder.none,
+                ),
+              ),
+            );
           }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         },
       ),
     );

@@ -6,7 +6,7 @@ import 'package:notesapp/services/cloud/cloud_storage_exceptions.dart';
 class FirebaseCloudStorage {
   final notes = FirebaseFirestore.instance.collection('notes');
 
-Future<CloudNote> createNewNote({required String ownerUserId}) async {
+  Future<CloudNote> createNewNote({required String ownerUserId}) async {
     final document = await notes.add({
       ownerUserIdFieldName: ownerUserId,
       textFieldName: '',
@@ -38,26 +38,29 @@ Future<CloudNote> createNewNote({required String ownerUserId}) async {
     }
   }
 
-  Stream<Iterable<CloudNote>> allNotes({required String ownerUserId}) =>
-      notes.snapshots().map((event) => event.docs
-          .map((doc) => CloudNote.fromSnapshot(doc))
-          .where((note) => note.ownerUserId == ownerUserId));
-
-  Future<Iterable<CloudNote>> getNotes({required String ownerUserId}) async {
-    try {
-      return await notes
-          .where(
-            ownerUserIdFieldName,
-            isEqualTo: ownerUserId,
-          )
-          .get()
-          .then(
-            (value) => value.docs.map((doc) => CloudNote.fromSnapshot(doc)),
-          );
-    } catch (e) {
-      throw CouldNotGetAllNotesException();
-    }
+  Stream<Iterable<CloudNote>> allNotes({required String ownerUserId}) {
+    final allNotes = notes
+        .where(ownerUserIdFieldName, isEqualTo: ownerUserId)
+        .snapshots()
+        .map((event) => event.docs.map((doc) => CloudNote.fromSnapshot(doc)));
+    return allNotes;
   }
+
+  // Future<Iterable<CloudNote>> getNotes({required String ownerUserId}) async {
+  //   try {
+  //     return await notes
+  //         .where(
+  //           ownerUserIdFieldName,
+  //           isEqualTo: ownerUserId,
+  //         )
+  //         .get()
+  //         .then(
+  //           (value) => value.docs.map((doc) => CloudNote.fromSnapshot(doc)),
+  //         );
+  //   } catch (e) {
+  //     throw CouldNotGetAllNotesException();
+  //   }
+  // }
 
   static final FirebaseCloudStorage _shared =
       FirebaseCloudStorage._sharedInstance();

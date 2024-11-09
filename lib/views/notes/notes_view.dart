@@ -36,7 +36,7 @@ class _NotesViewState extends State<NotesView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          ' Rasuko',
+          ' Rasko',
           style: GoogleFonts.montserratAlternates(
             fontSize: 26,
             fontWeight: FontWeight.w800,
@@ -44,12 +44,6 @@ class _NotesViewState extends State<NotesView> {
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(createOrUpdateNoteRoute);
-            },
-            icon: const Icon(Icons.add),
-          ),
           PopupMenuButton<MenuAction>(
             onSelected: (value) async {
               switch (value) {
@@ -89,6 +83,9 @@ class _NotesViewState extends State<NotesView> {
                   onTap: (note) {
                     Navigator.of(context)
                         .pushNamed(createOrUpdateNoteRoute, arguments: note);
+                  },
+                  onCreateNote: () {
+                    Navigator.of(context).pushNamed(createOrUpdateNoteRoute);
                   },
                 );
               } else {

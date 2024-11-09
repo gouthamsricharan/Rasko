@@ -61,7 +61,11 @@ class FirebaseAuthProvider implements AuthProvider {
         throw UserNotLoggedInAuthException();
       }
     } on FirebaseAuthException catch (e) {
+      // print(e);
       if (e.code == 'invalid-credential') {
+        throw InvalidCredentialsAuthExeption();
+      } else if (e.code ==
+          'The supplied auth credential is incorrect, malformed or has expired.') {
         throw InvalidCredentialsAuthExeption();
       } else if (e.code == 'wrong-password') {
         throw WrongPasswordAuthException();

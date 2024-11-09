@@ -7,7 +7,6 @@ import 'package:notesapp/services/auth/bloc/auth_event.dart';
 import 'package:notesapp/services/auth/bloc/auth_state.dart';
 import 'package:notesapp/utilities/dialogs/error_dialog.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notesapp/utilities/dialogs/loading_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -19,7 +18,6 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
-  CloseDialog? _closeDialogHandle;
 
   @override
   void initState() {
@@ -40,24 +38,15 @@ class _LoginViewState extends State<LoginView> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
         if (state is AuthStateLoggedOut) {
-          final closeDialog = _closeDialogHandle;
-          if (!state.isLoading && closeDialog != null) {
-            closeDialog();
-            _closeDialogHandle = null;
-          }
-          if (state.isLoading && closeDialog == null) {
-            _closeDialogHandle = showLoadingDialog(
-              context: context,
-              text: 'Loading..',
-            );
-          }
-
           if (state.exception is UserNotFoundAuthException) {
-            await showErrorDialog(context, 'User Not Found ');
+            await showErrorDialog(
+              context,
+              'Cannot find a user with the entered credentials!',
+            );
           } else if (state.exception is WrongPasswordAuthException) {
-            await showErrorDialog(context, 'Wrong Credentials ');
+            await showErrorDialog(context, 'Wrong credentials');
           } else if (state.exception is GenericAuthException) {
-            await showErrorDialog(context, 'Authenticatoin Error');
+            await showErrorDialog(context, 'Authentication error');
           }
         }
       },
@@ -90,7 +79,6 @@ class _LoginViewState extends State<LoginView> {
                 autocorrect: false,
                 autofocus: true,
                 keyboardType: TextInputType.emailAddress,
-                
                 decoration: InputDecoration(
                   hintText: 'Enter your email here...',
                   labelText: 'Email',
