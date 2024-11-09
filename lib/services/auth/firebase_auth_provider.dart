@@ -30,6 +30,11 @@ class FirebaseAuthProvider implements AuthProvider {
         throw EmailAlreadyInUseAuthException();
       } else if (e.code == 'invalid-email') {
         throw InvalidEmailAuthException();
+      } else if (e.code == 'invalid-credential') {
+        throw InvalidCredentialsAuthExeption();
+      } else if (e.code ==
+          'The supplied auth credential is incorrect, malformed or has expired') {
+        throw InvalidCredentialsAuthExeption();
       } else {
         throw GenericAuthException();
       }
@@ -49,11 +54,15 @@ class FirebaseAuthProvider implements AuthProvider {
   }
 
   @override
-  Future<AuthUser> logIn(
-      {required String email, required String password}) async {
+  Future<AuthUser> logIn({
+    required String email,
+    required String password,
+  }) async {
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
       final user = currentUser;
       if (user != null) {
         return user;
@@ -61,20 +70,14 @@ class FirebaseAuthProvider implements AuthProvider {
         throw UserNotLoggedInAuthException();
       }
     } on FirebaseAuthException catch (e) {
-      // print(e);
-      if (e.code == 'invalid-credential') {
-        throw InvalidCredentialsAuthExeption();
-      } else if (e.code ==
-          'The supplied auth credential is incorrect, malformed or has expired.') {
-        throw InvalidCredentialsAuthExeption();
+      if (e.code == 'user-not-found') {
+        throw UserNotFoundAuthException();
       } else if (e.code == 'wrong-password') {
         throw WrongPasswordAuthException();
-      } else if (e.code == 'user-not-found') {
-        throw UserNotFoundAuthException();
       } else {
         throw GenericAuthException();
       }
-    } catch (e) {
+    } catch (_) {
       throw GenericAuthException();
     }
   }
