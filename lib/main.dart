@@ -17,7 +17,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Rasko',
       theme: ThemeData(
         primarySwatch: Colors.grey,
       ),
@@ -66,6 +66,5 @@ class HomePage extends StatelessWidget {
         }
       },
     );
-   
   }
 }
