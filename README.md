@@ -1,8 +1,8 @@
-# Rasko
+# 🗒️ Rasko
 
 A new Flutter project that is used for writing simple notes
 
-## Getting Started
+## 🚀 About This Project
 
 This is a simple Note Application built using Flutter. The main purpose of this app is to allow users to write and store notes securely. One of the key features of this application is that it allows users to back up their notes and restore them on any device just by logging into their account. This makes accessing notes easy and seamless across multiple devices.
 
@@ -10,22 +10,62 @@ This project was created as part of my learning journey with Dart and Flutter. I
 
 The app uses BLoC (Business Logic Component) architecture for state management. This helps to cleanly separate the user interface from the underlying logic, making the code more organized, scalable, and easier to maintain.
 
-views of the application is mentioned below :
+## 📱 App Screenshots
 
-below attached screen is the splashscreen , it is the first interface one deal with when opening an app.
-![Screenshot_2025-04-14-20-23-19-245_com itsgoutham notesapp 2](https://github.com/user-attachments/assets/1a9e0faf-c1b5-445b-839e-9a606df2f9a5)
+Here are some views of the application:
 
-view of the login page is atttached below :
-![Screenshot_2025-04-14-20-23-00-098_com itsgoutham notesapp 1](https://github.com/user-attachments/assets/55d03159-7fa3-4710-88ff-e49b082b04d0)
+### 🌀 Splash Screen
+This is the first screen you see when launching the app.
 
-view of the register screen is attached below:
-![Screenshot_2025-04-14-20-23-04-969_com itsgoutham notesapp 1](https://github.com/user-attachments/assets/2b0b6a2e-19dc-45dd-9920-c9a8685d70c0)
+<img src="https://github.com/user-attachments/assets/1a9e0faf-c1b5-445b-839e-9a606df2f9a5" width="300"/>
 
-view od the forgot password is attached below:
-![Screenshot_2025-04-14-20-23-08-215_com itsgoutham notesapp 1](https://github.com/user-attachments/assets/60273277-d38b-4ea4-9c38-52c37c885db7)
+---
 
-view of the notes list written in past is attached below:
-![Screenshot_2025-04-14-20-22-42-975_com itsgoutham notesapp 2](https://github.com/user-attachments/assets/688aa708-bb96-409a-b608-b1f51157fe27)
+### 🔐 Login Screen
 
-view of the new note is added below:
-![Screenshot_2025-04-14-20-22-48-106_com itsgoutham notesapp 1](https://github.com/user-attachments/assets/a912aa59-5bc9-4ba5-8cee-f3430662be10)
+<img src="https://github.com/user-attachments/assets/55d03159-7fa3-4710-88ff-e49b082b04d0" width="300"/>
+
+---
+
+### 📝 Register Screen
+
+<img src="https://github.com/user-attachments/assets/2b0b6a2e-19dc-45dd-9920-c9a8685d70c0" width="300"/>
+
+---
+
+### 🔑 Forgot Password
+
+<img src="https://github.com/user-attachments/assets/60273277-d38b-4ea4-9c38-52c37c885db7" width="300"/>
+
+---
+
+### 📃 Notes List (Previously Written Notes)
+
+<img src="https://github.com/user-attachments/assets/688aa708-bb96-409a-b608-b1f51157fe27" width="300"/>
+
+---
+
+### ➕ Create New Note
+
+<img src="https://github.com/user-attachments/assets/a912aa59-5bc9-4ba5-8cee-f3430662be10" width="300"/>
+
+---
+
+## 🧰 Tech Stack
+
+- Flutter
+- Dart
+- BLoC Architecture
+- Firebase (for auth and storage) *(assumed based on context)*
+
+---
+
+## 📦 Getting Started
+
+To run this project locally:
+
+```bash
+git clone https://github.com/your-username/rasko.git
+cd rasko
+flutter pub get
+flutter run
