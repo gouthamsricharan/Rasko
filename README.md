@@ -56,7 +56,7 @@ This is the first screen you see when launching the app.
 - Flutter
 - Dart
 - BLoC Architecture
-- Firebase (for auth and storage) *(assumed based on context)*
+- Firebase (for auth and storage)
 
 ---
 
