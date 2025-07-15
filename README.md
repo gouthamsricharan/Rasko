@@ -23,25 +23,25 @@ This is the first screen you see when launching the app.
 
 ### 🔐 Login Screen
 
-<img src="(https://github.com/user-attachments/assets/a0dced25-fabc-4ae4-b49a-38f6f622664a)" width="300"/>
+<img src="https://github.com/user-attachments/assets/2496e9bb-45be-43e5-9af0-d58e6e90c837" width="300"/>
 
 ---
 
 ### 📝 Register Screen
 
-<img src="https://github.com/user-attachments/assets/a6e99efe-ca7b-4f61-9d7f-f366a4954f3b" width="300"/>
+<img src="https://github.com/user-attachments/assets/a0dced25-fabc-4ae4-b49a-38f6f622664a" width="300"/>
 
 ---
 
 ### 🔑 Forgot Password
 
-<img src="https://github.com/user-attachments/assets/016a3aeb-23ed-4f40-bcca-4b6ec05e86c1" width="300"/>
+<img src="https://github.com/user-attachments/assets/a6e99efe-ca7b-4f61-9d7f-f366a4954f3b" width="300"/>
 
 ---
 
 ### 📃 Notes List (Previously Written Notes)
 
-<img src="https://github.com/user-attachments/assets/134bb96b-7a73-4443-b39e-89e076915936" width="300"/>
+<img src="https://github.com/user-attachments/assets/016a3aeb-23ed-4f40-bcca-4b6ec05e86c1" width="300"/>
 
 ---
 
@@ -69,4 +69,3 @@ git clone https://github.com/your-username/rasko.git
 cd rasko
 flutter pub get
 flutter run
-
