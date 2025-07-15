@@ -23,31 +23,31 @@ This is the first screen you see when launching the app.
 
 ### 🔐 Login Screen
 
-<img src="https://github.com/user-attachments/assets/55d03159-7fa3-4710-88ff-e49b082b04d0" width="300"/>
+<img src="https://github.com/user-attachments/assets/2496e9bb-45be-43e5-9af0-d58e6e90c837" width="300"/>
 
 ---
 
 ### 📝 Register Screen
 
-<img src="https://github.com/user-attachments/assets/2b0b6a2e-19dc-45dd-9920-c9a8685d70c0" width="300"/>
+<img src="https://github.com/user-attachments/assets/a0dced25-fabc-4ae4-b49a-38f6f622664a" width="300"/>
 
 ---
 
 ### 🔑 Forgot Password
 
-<img src="https://github.com/user-attachments/assets/60273277-d38b-4ea4-9c38-52c37c885db7" width="300"/>
+<img src="https://github.com/user-attachments/assets/a6e99efe-ca7b-4f61-9d7f-f366a4954f3b" width="300"/>
 
 ---
 
 ### 📃 Notes List (Previously Written Notes)
 
-<img src="https://github.com/user-attachments/assets/688aa708-bb96-409a-b608-b1f51157fe27" width="300"/>
+<img src="https://github.com/user-attachments/assets/016a3aeb-23ed-4f40-bcca-4b6ec05e86c1" width="300"/>
 
 ---
 
 ### ➕ Create New Note
 
-<img src="https://github.com/user-attachments/assets/a912aa59-5bc9-4ba5-8cee-f3430662be10" width="300"/>
+<img src="https://github.com/user-attachments/assets/134bb96b-7a73-4443-b39e-89e076915936" width="300"/>
 
 ---
 
