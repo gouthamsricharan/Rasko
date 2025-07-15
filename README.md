@@ -47,7 +47,7 @@ This is the first screen you see when launching the app.
 
 ### ➕ Create New Note
 
-<img src="https://github.com/user-attachments/assets/a912aa59-5bc9-4ba5-8cee-f3430662be10" width="300"/>
+<img src="https://github.com/user-attachments/assets/134bb96b-7a73-4443-b39e-89e076915936" width="300"/>
 
 ---
 
