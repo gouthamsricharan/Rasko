@@ -15,11 +15,18 @@ import 'package:notesapp/views/verify_email_view.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(
-    MaterialApp(
-      title: 'Rasko',
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Notes App',
       theme: ThemeData(
-        primarySwatch: Colors.grey,
+        primarySwatch: Colors.blue,
       ),
       home: BlocProvider<AuthBloc>(
         create: (context) => AuthBloc(FirebaseAuthProvider()),
@@ -28,8 +35,8 @@ void main() {
       routes: {
         createOrUpdateNoteRoute: (context) => const CreateUpdateNoteView(),
       },
-    ),
-  );
+    );
+  }
 }
 
 class HomePage extends StatelessWidget {
