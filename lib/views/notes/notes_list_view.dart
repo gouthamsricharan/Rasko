@@ -12,14 +12,14 @@ class NotesListView extends StatelessWidget {
   final Iterable<CloudNote> notes;
   final NoteCallback onDeleteNote;
   final NoteCallback onTap;
-  final VoidCallback onCreateNote; // New callback for creating notes
+  final VoidCallback onCreateNote;
 
   const NotesListView({
     super.key,
     required this.notes,
     required this.onDeleteNote,
     required this.onTap,
-    required this.onCreateNote, // Add this to constructor
+    required this.onCreateNote,
   });
 
   Future<void> _handleDelete(BuildContext context, CloudNote note) async {
@@ -39,40 +39,142 @@ class NotesListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        ListView.builder(
-          itemCount: notes.length,
-          padding: const EdgeInsets.only(
-            top: 8.0,
-            bottom: 80.0, // Add bottom padding to avoid FAB overlap
-            left: 0,
-            right: 0,
-          ),
-          itemBuilder: (context, index) {
-            final note = notes.elementAt(index);
-            return _NoteCard(
-              note: note,
-              onDelete: (context) => _handleDelete(context, note),
-              onShare: (context) => _handleShare(context, note),
-              onTap: () => onTap(note),
-            );
-          },
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.green[50],
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.green[50]!,
+            Colors.green[25] ?? Colors.green[50]!,
+          ],
         ),
-        Positioned(
-          right: 30.0,
-          bottom: 30.0,
-          child: FloatingActionButton(
-            onPressed: onCreateNote,
-            elevation: 4,
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            child: const Icon(
-              Icons.add,
-              color: Colors.white,
+      ),
+      child: Stack(
+        children: [
+          // Empty state or notes list
+          notes.isEmpty
+              ? _buildEmptyState(context)
+              : ListView.builder(
+                  itemCount: notes.length,
+                  padding: const EdgeInsets.only(
+                    top: 16.0,
+                    bottom: 100.0,
+                    left: 16.0,
+                    right: 16.0,
+                  ),
+                  itemBuilder: (context, index) {
+                    final note = notes.elementAt(index);
+                    return TweenAnimationBuilder(
+                      tween: Tween<double>(begin: 0, end: 1),
+                      duration: Duration(milliseconds: 300 + (index * 100)),
+                      builder: (context, double value, child) {
+                        return Transform.translate(
+                          offset: Offset(0, 50 * (1 - value)),
+                          child: Opacity(
+                            opacity: value,
+                            child: _NoteCard(
+                              note: note,
+                              onDelete: (context) =>
+                                  _handleDelete(context, note),
+                              onShare: (context) => _handleShare(context, note),
+                              onTap: () => onTap(note),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+
+          // Floating Action Button with enhanced styling
+          Positioned(
+            right: 24.0,
+            bottom: 24.0,
+            child: TweenAnimationBuilder(
+              tween: Tween<double>(begin: 0, end: 1),
+              duration: const Duration(milliseconds: 600),
+              builder: (context, double value, child) {
+                return Transform.scale(
+                  scale: value,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.green[700]!.withValues(alpha: 0.3),
+                          blurRadius: 12,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
+                    ),
+                    child: FloatingActionButton(
+                      onPressed: onCreateNote,
+                      elevation: 0,
+                      backgroundColor: Colors.green[700],
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                        size: 28,
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
-        ),
-      ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TweenAnimationBuilder(
+            tween: Tween<double>(begin: 0, end: 1),
+            duration: const Duration(milliseconds: 800),
+            builder: (context, double value, child) {
+              return Transform.scale(
+                scale: value,
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: Colors.green[100],
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.note_outlined,
+                    size: 64,
+                    color: Colors.green[700],
+                  ),
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 24),
+          Text(
+            'No Notes Yet',
+            style: GoogleFonts.roboto(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.green[700],
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Tap the + button to create your first note',
+            style: GoogleFonts.roboto(
+              fontSize: 16,
+              color: Colors.grey[600],
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -90,10 +192,40 @@ class _NoteCard extends StatelessWidget {
     required this.onTap,
   });
 
+  String _getPreviewText(String text) {
+    // Remove extra whitespace and get first line or first 100 characters
+    final cleanText = text.trim().replaceAll(RegExp(r'\s+'), ' ');
+    if (cleanText.isEmpty) return 'Empty note';
+
+    final lines = cleanText.split('\n');
+    final firstLine = lines.first;
+
+    if (firstLine.length > 100) {
+      return '${firstLine.substring(0, 100)}...';
+    }
+    return firstLine;
+  }
+
+  String _getSecondaryText(String text) {
+    final lines = text.trim().split('\n');
+    if (lines.length > 1) {
+      final secondLine = lines[1].trim();
+      if (secondLine.isNotEmpty) {
+        return secondLine.length > 60
+            ? '${secondLine.substring(0, 60)}...'
+            : secondLine;
+      }
+    }
+    return '';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final previewText = _getPreviewText(note.text);
+    final secondaryText = _getSecondaryText(note.text);
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
+      padding: const EdgeInsets.only(bottom: 12.0),
       child: Slidable(
         key: ValueKey(note),
         endActionPane: ActionPane(
@@ -101,51 +233,102 @@ class _NoteCard extends StatelessWidget {
           children: [
             SlidableAction(
               onPressed: onDelete,
-              backgroundColor: Theme.of(context).colorScheme.error,
+              backgroundColor: Colors.red[600]!,
               foregroundColor: Colors.white,
-              icon: Icons.delete,
+              icon: Icons.delete_outline,
               label: 'Delete',
               borderRadius:
-                  const BorderRadius.horizontal(left: Radius.circular(12)),
+                  const BorderRadius.horizontal(left: Radius.circular(16)),
             ),
             SlidableAction(
               onPressed: onShare,
-              backgroundColor: Theme.of(context).colorScheme.secondary,
+              backgroundColor: Colors.green[600]!,
               foregroundColor: Colors.white,
-              icon: Icons.share,
+              icon: Icons.share_outlined,
               label: 'Share',
               borderRadius:
-                  const BorderRadius.horizontal(right: Radius.circular(12)),
+                  const BorderRadius.horizontal(right: Radius.circular(16)),
             ),
           ],
         ),
         child: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(12.0),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16.0),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
+                color: Colors.black.withValues(alpha: 0.08),
                 spreadRadius: 1,
-                blurRadius: 4,
-                offset: const Offset(0, 2),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
               ),
             ],
           ),
-          child: ListTile(
-            onTap: onTap,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
-            ),
-            title: Text(
-              note.text,
-              maxLines: 1,
-              softWrap: true,
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.roboto(
-                fontSize: 18,
-                color: Theme.of(context).textTheme.bodyLarge?.color,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(16.0),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Main text with icon
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.green[100],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            Icons.note_outlined,
+                            size: 20,
+                            color: Colors.green[700],
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                previewText,
+                                style: GoogleFonts.roboto(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey[800],
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              if (secondaryText.isNotEmpty) ...[
+                                const SizedBox(height: 4),
+                                Text(
+                                  secondaryText,
+                                  style: GoogleFonts.roboto(
+                                    fontSize: 14,
+                                    color: Colors.grey[600],
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          size: 16,
+                          color: Colors.grey[400],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

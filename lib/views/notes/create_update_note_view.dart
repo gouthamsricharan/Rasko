@@ -46,8 +46,10 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     if (widgetNote != null) {
       _note = widgetNote;
       _textController.text = widgetNote.text;
+      _setupTextControllerListener();
       return widgetNote;
     }
+
     final existingNote = _note;
     if (existingNote != null) return existingNote;
 
@@ -55,6 +57,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     final newNote =
         await _notesService.createNewNote(ownerUserId: currentUser.id);
     _note = newNote;
+    _setupTextControllerListener();
     return newNote;
   }
 
@@ -86,51 +89,116 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: const Text(
-          'New Note',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 26,
-            fontWeight: FontWeight.w900,
+      backgroundColor: Colors.green[50],
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Colors.green[700]!,
+                Colors.green[600]!,
+              ],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.green[700]!.withValues(alpha: 0.2),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            leading: Container(
+              margin: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.white,
+                  size: 20,
+                ),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ),
+            title: Text(
+              'New Note',
+              style: GoogleFonts.roboto(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            ),
+            actions: [
+              Container(
+                margin: const EdgeInsets.only(right: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: IconButton(
+                  onPressed: () async {
+                    final text = _textController.text;
+                    if (_note == null || text.isEmpty) {
+                      await showCannotShareEmptyDialog(context);
+                    } else {
+                      Share.share(text);
+                    }
+                  },
+                  icon: const Icon(
+                    Icons.share_rounded,
+                    color: Colors.white,
+                    size: 22,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () async {
-              final text = _textController.text;
-              if (_note == null || text.isEmpty) {
-                await showCannotShareEmptyDialog(context);
-              } else {
-                Share.share(text);
-              }
-            },
-            icon: const Icon(Icons.share_rounded),
-          ),
-        ],
       ),
       body: FutureBuilder(
         future: createOrGetExistingNote(context),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            _setupTextControllerListener();
             return Container(
-              padding: const EdgeInsets.all(16),
-              child: TextField(
-                controller: _textController,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                style: GoogleFonts.roboto(
-                  fontSize: 16,
-                  height: 1.5,
-                ),
-                decoration: InputDecoration(
-                  hintText: 'Start typing your note...',
-                  hintStyle: GoogleFonts.roboto(
-                    color: Colors.grey,
+              margin: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
-                  border: InputBorder.none,
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: TextField(
+                  controller: _textController,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  autofocus: true,
+                  style: GoogleFonts.roboto(
+                    fontSize: 16,
+                    height: 1.5,
+                    color: Colors.grey[800],
+                  ),
+                  decoration: InputDecoration(
+                    hintText: 'Start typing your note...',
+                    hintStyle: GoogleFonts.roboto(
+                      color: Colors.grey[400],
+                    ),
+                    border: InputBorder.none,
+                  ),
                 ),
               ),
             );
