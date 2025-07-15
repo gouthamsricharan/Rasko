@@ -65,7 +65,7 @@ This is the first screen you see when launching the app.
 To run this project locally:
 
 ```bash
-git clone https://github.com/your-username/rasko.git
+git clone https://github.com/gouthamsricharan/rasko.git
 cd rasko
 flutter pub get
 flutter run
